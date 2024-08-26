@@ -57,9 +57,6 @@ function App() {
     setIsFourthModalVisible(prev => !prev);
   };
 
-
-
-
   return (
     <>
       {!isTg ? (
@@ -77,7 +74,7 @@ function App() {
         </div>
       ) : (
         <TonConnectUIProvider
-          manifestUrl="https://ton-masters.vercel.app/tonconnect-manifest.json"
+          manifestUrl="https://ton-masters.vercel.app/src/tonconnect-manifest.json"
           uiPreferences={{
             borderRadius: 'm',
             colorsSet: {
@@ -113,7 +110,7 @@ function App() {
             padding: '40px 20px',
             color: '#ffffff',
             position: 'relative',
-            top: '190px'
+            top: '250px'
           }}>
             <h1 className="main-h1">
               TON Masters
