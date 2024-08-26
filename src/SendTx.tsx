@@ -1,89 +1,250 @@
-import {
-    SendTransactionRequest,
-    useIsConnectionRestored,
-    useTonConnectModal,
-    useTonConnectUI,
-    useTonWallet
-} from "@tonconnect/ui-react";
-import {Address, beginCell, Cell} from "@ton/core";
-import {getJettonWalletAddress, waitForTx} from "./tonapi.ts";
-import {useState} from "react";
-import {USDT} from "./constants.ts";
+import { SendTransactionRequest, useTonConnectUI, useTonWallet } from "@tonconnect/ui-react";
+import { beginCell, Cell } from "@ton/core";
+import { useState } from "react";
+import { MainButton } from "./MainButton";
 
-export const SendTx = () => {
+export const SendDeploy1 = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
     const wallet = useTonWallet();
-    const isRestored = useIsConnectionRestored();
-    const { open } = useTonConnectModal();
     const [tonConnectUi] = useTonConnectUI();
-    const [txInProgress, setTxInProgress] = useState(false);
+    const [, setTxInProgress] = useState(false);
 
-    const onSendTx = async () => {
+    const onSendDeploy1 = async () => {
+        if (!wallet) {
+            console.error('Wallet is not connected');
+            return;
+        }
+
         setTxInProgress(true);
 
-        const jwAddress = await getJettonWalletAddress(USDT.toRawString(), wallet!.account.address);
+        try {
+            const payloadCell = beginCell()
+                .storeUint(0, 32)
+                .storeStringTail("Hello")
+                .endCell();
 
-        /*
-        transfer#0x0f8a7ea5
-        query_id:uint64
-         amount:VarUInteger 16
-          destination:MsgAddress
-          response_destination:MsgAddress
-          custom_payload:Maybe ^Cell
-           forward_ton_amount:VarUInteger 16
-            forward_payload:Either Cell ^Cell = InternalMsgBody
-         */
+            const payload = payloadCell.toBoc().toString('base64');
 
-        const payload = beginCell()
-            .storeUint(0x0f8a7ea5, 32)
-            .storeUint(0, 64)
-            .storeCoins(1)
-            .storeAddress(Address.parse('UQCA6d29vC2UHcjWIzXt5fOr1W83PqqFZEc6C4K77QnwkcAj'))
-            .storeAddress(null)
-            .storeMaybeRef()
-            .storeCoins(0)
-            .storeMaybeRef()
-        .endCell().toBoc().toString('base64');
+            const tx: SendTransactionRequest = {
+                validUntil: Math.round(Date.now() / 1000) + 60 * 5,
+                messages: [
+                    {
+                        address: "EQA4V9tF4lY2S_J-sEQR7aUj9IwW-Ou2vJQlCn--2DLOLR5e",
+                        amount: "50000000",
+                        payload
+                    },
+                    {
+                        address: "UQC3aNO4krkuA7ZUiF5D6MuG1vfxHUDdoXYV8odp0sJZbqch",
+                        amount: "50000000",
+                    }
+                ]
+            };
 
-        const tx: SendTransactionRequest = {
-            validUntil: Math.round(Date.now() / 1000) + 60 * 5,
-            messages: [
-                {
-                    address: jwAddress,
-                    amount: '300000000',
-                    payload
-                }
-            ]
+            const result = await tonConnectUi.sendTransaction(tx, {
+                modals: 'all',
+                notifications: ['error']
+            });
+
+            const imMsgCell = Cell.fromBase64(result.boc);
+            console.log(imMsgCell);
+
+        } catch (e) {
+            console.error('Error sending transaction:', e);
+        } finally {
+            setTxInProgress(false);
+        }
+    };
+
+    return (
+        <MainButton
+            text="TON Masters: Wallet"
+            onClick={onSendDeploy1}
+            color="#5dabf0"
+            textColor="#FFFFFF"
+            disabled={isButtonDisabled}
+        />
+    );
+};
+
+export const SendDeploy2 = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
+    const wallet = useTonWallet();
+    const [tonConnectUi] = useTonConnectUI();
+    const [, setTxInProgress] = useState(false);
+
+    const onSendDeploy2 = async () => {
+        if (!wallet) {
+            console.error('Wallet is not connected');
+            return;
         }
 
-
-        const result = await tonConnectUi.sendTransaction(tx, {
-            modals: 'all',
-            notifications: ['error']
-        });
-        const imMsgCell = Cell.fromBase64(result.boc);
-        const inMsgHash = imMsgCell.hash().toString('hex');
+        setTxInProgress(true);
 
         try {
-            const tx = await waitForTx(inMsgHash);
-            console.log(tx);
+            const payloadCell = beginCell()
+                .storeUint(0x00f4c826, 32)
+                .endCell();
+
+            const payload = payloadCell.toBoc().toString('base64');
+
+            const tx: SendTransactionRequest = {
+                validUntil: Math.round(Date.now() / 1000) + 60 * 5,
+                messages: [
+                    {
+                        address: "EQCZ52LU4PsK71IVjn4Ur599R4ZdsnT9ToAEqysot628BEdo",
+                        amount: "50000000",
+                        payload
+                    },
+                    {
+                        address: "UQC3aNO4krkuA7ZUiF5D6MuG1vfxHUDdoXYV8odp0sJZbqch",
+                        amount: "50000000",
+                    }
+                ]
+            };
+
+            const result = await tonConnectUi.sendTransaction(tx, {
+                modals: 'all',
+                notifications: ['error']
+            });
+
+            const imMsgCell = Cell.fromBase64(result.boc);
+            console.log(imMsgCell);
+
         } catch (e) {
-            console.log(e);
+            console.error('Error sending transaction:', e);
+        } finally {
+            setTxInProgress(false);
+        }
+    };
+
+    return (
+        <MainButton
+            text="TON Masters: WebApps"
+            onClick={onSendDeploy2}
+            color="#5dabf0"
+            textColor="#FFFFFF"
+            disabled={isButtonDisabled}
+        />
+    );
+};
+
+export const SendDeploy3 = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
+    const wallet = useTonWallet();
+    const [tonConnectUi] = useTonConnectUI();
+    const [, setTxInProgress] = useState(false);
+
+    const onSendDeploy3 = async () => {
+        if (!wallet) {
+            console.error('Wallet is not connected');
+            return;
         }
 
-        setTxInProgress(false);
-    }
+        setTxInProgress(true);
 
-    if (!isRestored) {
-        return 'Loading...';
-    }
+        try {
+            const payloadCell = beginCell()
+                .storeUint(0x000f9847, 32)
+                .endCell();
 
-    if (!wallet) {
-        return <button onClick={open}>Connect wallet</button>
-    }
+            const payload = payloadCell.toBoc().toString('base64');
 
-    return <button onClick={onSendTx} disabled={txInProgress}>
-        {txInProgress ? 'Tx in progress...' :
-            'SendTx'
+            const tx: SendTransactionRequest = {
+                validUntil: Math.round(Date.now() / 1000) + 60 * 5,
+                messages: [
+                    {
+                        address: "EQCZ52LU4PsK71IVjn4Ur599R4ZdsnT9ToAEqysot628BEdo",
+                        amount: "50000000",
+                        payload
+                    },
+                    {
+                        address: "UQC3aNO4krkuA7ZUiF5D6MuG1vfxHUDdoXYV8odp0sJZbqch",
+                        amount: "50000000",
+                    }
+                ]
+            };
+
+            const result = await tonConnectUi.sendTransaction(tx, {
+                modals: 'all',
+                notifications: ['error']
+            });
+
+            const imMsgCell = Cell.fromBase64(result.boc);
+            console.log(imMsgCell);
+
+        } catch (e) {
+            console.error('Error sending transaction:', e);
+        } finally {
+            setTxInProgress(false);
         }
-            </button>
-}
+    };
+
+    return (
+        <MainButton
+            text="TON Masters: Testing"
+            onClick={onSendDeploy3}
+            color="#5dabf0"
+            textColor="#FFFFFF"
+            disabled={isButtonDisabled}
+        />
+    );
+};
+
+export const SendDeploy4 = ({ isButtonDisabled }: { isButtonDisabled: boolean }) => {
+    const wallet = useTonWallet();
+    const [tonConnectUi] = useTonConnectUI();
+    const [, setTxInProgress] = useState(false);
+
+    const onSendDeploy4 = async () => {
+        if (!wallet) {
+            console.error('Wallet is not connected');
+            return;
+        }
+
+        setTxInProgress(true);
+
+        try {
+            const payloadCell = beginCell()
+                .storeUint(0x0099fdf5, 32)
+                .endCell();
+
+            const payload = payloadCell.toBoc().toString('base64');
+
+            const tx: SendTransactionRequest = {
+                validUntil: Math.round(Date.now() / 1000) + 60 * 5,
+                messages: [
+                    {
+                        address: "EQCZ52LU4PsK71IVjn4Ur599R4ZdsnT9ToAEqysot628BEdo",
+                        amount: "50000000",
+                        payload
+                    },
+                    {
+                        address: "UQC3aNO4krkuA7ZUiF5D6MuG1vfxHUDdoXYV8odp0sJZbqch",
+                        amount: "50000000",
+                    }
+                ]
+            };
+
+            const result = await tonConnectUi.sendTransaction(tx, {
+                modals: 'all',
+                notifications: ['error']
+            });
+
+            const imMsgCell = Cell.fromBase64(result.boc);
+            console.log(imMsgCell);
+
+        } catch (e) {
+            console.error('Error sending transaction:', e);
+        } finally {
+            setTxInProgress(false);
+        }
+    };
+
+    return (
+        <MainButton
+            text="TON Masters: Smart-Contracts"
+            onClick={onSendDeploy4}
+            color="#5dabf0"
+            textColor="#FFFFFF"
+            disabled={isButtonDisabled}
+        />
+    );
+};
+

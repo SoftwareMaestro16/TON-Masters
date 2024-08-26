@@ -1,0 +1,209 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: rgb(0, 0, 0);
+    height: 90vh;
+    text-align: center;
+    background: black
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Prevent scrolling */
+
+  }
+  
+@media (max-width: 400px) and (max-height: 700px) {
+    body {
+        background: radial-gradient(
+        circle at center calc(28% - 630px),
+        #3c98e8 55%,
+        rgb(255, 255, 255) 86%
+        );
+        background-size: cover;
+    }
+}
+
+@media (max-width: 450px) and (max-height: 1000px) {
+    body {
+        background: radial-gradient(
+        circle at center calc(28% - 630px),
+        #3c98e8 55%,
+        rgb(255, 255, 255) 86%
+        );
+        background-size: cover;
+    }
+}
+
+.TonConnectUIProvider {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+  
+.main-h1 {
+    font-size: 4rem;
+    position: relative;
+    margin-top: -43%; 
+    background: linear-gradient(45deg, 
+        rgb(114, 179, 231), 
+        rgba(81, 181, 228, 0.904)
+    );
+    background-size: 300% 300%; 
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    -webkit-text-stroke: 1px white; /* Add white outline to the text */
+}
+
+.main-h2 {
+    font-size: 3.3rem;
+    position: relative;
+    margin-top: -4%; 
+    background: linear-gradient(45deg, 
+        rgb(87, 160, 219), 
+        rgba(122, 206, 245, 0.897)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    background-size: 200% 200%;
+    -webkit-text-stroke: 0.7px white; /* Add white outline to the text */
+}
+
+@media (max-width: 400px) and (max-height: 700px) {
+    .main-h1 {
+        font-size: 2.4rem;
+    }
+
+    .main-h2 {
+        font-size: 1.9rem;
+    }
+}
+
+.image-container {
+    transition: opacity 0.5s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .image-container.fade-in {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .image-container.fade-out {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Размытый фон */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    position: relative;
+    transition: transform 0.3s ease;
+    transform: scale(0.9);
+    opacity: 0; /* Начальная прозрачность */
+    animation: fadeIn 0.3s forwards; /* Анимация для плавного появления */
+}
+
+.modal.show .modal-content {
+    transform: scale(1);
+}
+
+.modal img {
+    width: 100%;
+    max-width: 600px;
+    border-radius: 10px;
+    opacity: 0; /* Начальная прозрачность */
+    animation: fadeInImage 0.5s forwards; /* Анимация для плавного появления изображения */
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white; /* Фон крестика */
+    color: gray; /* Цвет крестика */
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 1001; /* Поверх модального окна */
+}
+
+.modal-close:hover {
+    color: darkgray;
+}
+
+/* Размытый фон для основного контента */
+.blur-background {
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+/* Анимация для плавного появления модального окна */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Анимация для плавного появления изображения */
+@keyframes fadeInImage {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

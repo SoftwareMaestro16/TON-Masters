@@ -2,9 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+      /* Запрещаем горизонтальную и вертикальную прокрутку и масштабирование */
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%; /* Обеспечиваем, чтобы высота охватывала весь экран */
+        width: 100%; /* Обеспечиваем, чтобы ширина охватывала весь экран */
+        touch-action: none; /* Отключаем масштабирование и жесты на мобильных устройствах */
+      }
+    </style><title>TON Masters</title>
   </head>
   <body>
     <div id="root"></div>
