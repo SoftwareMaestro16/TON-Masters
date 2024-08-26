@@ -74,7 +74,7 @@ function App() {
         </div>
       ) : (
         <TonConnectUIProvider
-          manifestUrl="https://ton-masters.vercel.app/src/tonconnect-manifest.json"
+          manifestUrl="https://softwaremaestro16.github.io/TON-Masters/src/tonconnect-manifest.json"
           uiPreferences={{
             borderRadius: 'm',
             colorsSet: {
