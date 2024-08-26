@@ -110,7 +110,7 @@ function App() {
             padding: '40px 20px',
             color: '#ffffff',
             position: 'relative',
-            top: '250px'
+            top: '225px'
           }}>
             <h1 className="main-h1">
               TON Masters
