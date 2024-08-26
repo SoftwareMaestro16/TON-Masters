@@ -77,7 +77,7 @@ function App() {
         </div>
       ) : (
         <TonConnectUIProvider
-          manifestUrl="https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json"
+          manifestUrl="https://ton-masters.vercel.app/tonconnect-manifest.json"
           uiPreferences={{
             borderRadius: 'm',
             colorsSet: {
